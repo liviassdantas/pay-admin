@@ -21,5 +21,8 @@ namespace AuthService.Service
         public async Task<List<User>> GetUsersAsync() =>
             await _userCollection.Find(user => true).ToListAsync();
 
+        public async Task<User> GetOneUserAsync(string id) =>
+            await _userCollection.Find<User>(user => id == user.Id).FirstOrDefaultAsync();
+
     }
 }
