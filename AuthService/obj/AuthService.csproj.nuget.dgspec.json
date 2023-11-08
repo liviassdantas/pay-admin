@@ -43,6 +43,18 @@
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[7.0.13, )"
+            },
+            "MongoDB.Bson": {
+              "target": "Package",
+              "version": "[2.22.0, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[2.22.0, )"
+            },
+            "MongoDB.Driver.Core": {
+              "target": "Package",
+              "version": "[2.22.0, )"
             }
           },
           "imports": [
