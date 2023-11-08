@@ -420,11 +420,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\livia\\source\\repos\\AuthService\\AuthService.csproj",
+      "projectUniqueName": "C:\\Users\\livia\\OneDrive\\Documentos\\GitHub\\pay-admin\\AuthService\\AuthService.csproj",
       "projectName": "AuthService",
-      "projectPath": "C:\\Users\\livia\\source\\repos\\AuthService\\AuthService.csproj",
+      "projectPath": "C:\\Users\\livia\\OneDrive\\Documentos\\GitHub\\pay-admin\\AuthService\\AuthService.csproj",
       "packagesPath": "C:\\Users\\livia\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\livia\\source\\repos\\AuthService\\obj\\",
+      "outputPath": "C:\\Users\\livia\\OneDrive\\Documentos\\GitHub\\pay-admin\\AuthService\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\livia\\AppData\\Roaming\\NuGet\\NuGet.Config",

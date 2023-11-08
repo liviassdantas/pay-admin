@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ZzoNfcqUcNyKij93TnO1tO6nAz0m8ljwYW/phyYBfEKViG0ysoDiA0Euzy4h7pkn1kx558q+sARcRhXrPcPHEg==",
+  "dgSpecHash": "Tmx6SvoMi/2hfw/nGD1FWCgBVSPLSnF0PQ6x/mSEhSJoovbnBKfVtBARCSNyUhRl8fxzqtt7aRbGEsNzdDcJKw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\livia\\source\\repos\\AuthService\\AuthService.csproj",
+  "projectFilePath": "C:\\Users\\livia\\OneDrive\\Documentos\\GitHub\\pay-admin\\AuthService\\AuthService.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\livia\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\7.0.13\\microsoft.aspnetcore.authentication.jwtbearer.7.0.13.nupkg.sha512",
     "C:\\Users\\livia\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
