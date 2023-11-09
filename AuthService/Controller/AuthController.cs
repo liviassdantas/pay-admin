@@ -1,5 +1,7 @@
 ﻿using AuthService.DTO;
+using AuthService.Interfaces;
 using AuthService.Service;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthService.Controller
@@ -8,9 +10,9 @@ namespace AuthService.Controller
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly AuthServices _authServices;
+        private readonly IAuthService _authServices;
 
-        public AuthController (AuthServices authServices)
+        public AuthController (IAuthService authServices)
         {
             _authServices = authServices;
         }
@@ -18,7 +20,20 @@ namespace AuthService.Controller
         [HttpPost("CreateUser")]
         public async Task<IActionResult> CreateNewUser(UserDTO userDTO)
         {
-            await _authServices.CreateUserAsync()
+            try
+            {
+                await _authServices.CreateUserAsync(userDTO);
+
+                return new ObjectResult(userDTO)
+                {
+                    StatusCode = StatusCodes.Status201Created
+                };
+                
+            } catch (Exception ex)
+            {
+                throw new HttpRequestException(ex.Message, ex.InnerException);
+            }
+            
         }
     }
 }

@@ -2,10 +2,11 @@
 using MongoDB.Driver;
 using Microsoft.Extensions.Options;
 using AuthService.DTO;
+using AuthService.Interfaces;
 
 namespace AuthService.Service
 {
-    public class AuthServices
+    public class AuthServices : IAuthService
     {
         private readonly IMongoCollection<User> _userCollection;
 
@@ -42,8 +43,17 @@ namespace AuthService.Service
             return ListUserDTO;
         }
 
-        public async Task<User> GetOneUserAsync(string id) =>
-            await _userCollection.Find<User>(user => id == user.Id).FirstOrDefaultAsync();
+        public async Task<UserDTO> GetOneUserAsync(string id)
+        {
+            var User = await _userCollection.Find<User>(user => id == user.Id).FirstOrDefaultAsync();
+            var returnUserDTO = new UserDTO
+            {
+                Email = User.Email,
+                Password = User.Password,
+                IsAdmin = User.IsAdmin,
+            };
+            return returnUserDTO;
+        }
 
     }
 }
