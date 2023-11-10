@@ -48,7 +48,6 @@ namespace AuthService.Service
 
             listUser.ForEach(user => listUserDTO.Add(new UserDTO {
                 Email = user.Email, 
-                Password = user.Password, 
                 IsAdmin = user.IsAdmin }));
 
             return listUserDTO;
@@ -56,11 +55,10 @@ namespace AuthService.Service
 
         public async Task<UserDTO> GetOneUserAsync(string email)
         {
-            var user = await _userCollection.Find<User>(user => email == user.Id).FirstOrDefaultAsync();
+            var user = await _userCollection.Find<User>(user => email == user.Email).FirstOrDefaultAsync();
             var returnUserDTO = new UserDTO
             {
                 Email = user.Email,
-                Password = user.Password,
                 IsAdmin = user.IsAdmin,
             };
             return returnUserDTO;
