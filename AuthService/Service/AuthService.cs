@@ -18,6 +18,10 @@ namespace AuthService.Service
             _userCollection = mongoDatabase.GetCollection<User>(authDatabaseSettings.Value.CollectionName);
         }
 
+        public AuthServices()
+        {
+        }
+
         public async Task CreateUserAsync(UserDTO userDTO)
         {
             var emailExists = VerifyIfEmailExists(userDTO.Email);
