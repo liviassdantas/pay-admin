@@ -129,3 +129,5 @@ C:\Users\livia\OneDrive\Documentos\GitHub\pay-admin\AuthServiceTests\obj\Debug\n
 C:\Users\livia\OneDrive\Documentos\GitHub\pay-admin\AuthServiceTests\obj\Debug\net7.0\AuthServiceTests.pdb
 C:\Users\livia\OneDrive\Documentos\GitHub\pay-admin\AuthServiceTests\obj\Debug\net7.0\AuthServiceTests.genruntimeconfig.cache
 C:\Users\livia\OneDrive\Documentos\GitHub\pay-admin\AuthServiceTests\obj\Debug\net7.0\ref\AuthServiceTests.dll
+C:\Users\livia\OneDrive\Documentos\GitHub\pay-admin\AuthServiceTests\bin\Debug\net7.0\Castle.Core.dll
+C:\Users\livia\OneDrive\Documentos\GitHub\pay-admin\AuthServiceTests\bin\Debug\net7.0\Moq.dll

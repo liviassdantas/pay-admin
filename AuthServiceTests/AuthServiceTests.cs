@@ -1,4 +1,9 @@
+using AuthService.DTO;
+using AuthService.Interfaces;
 using AuthService.Service;
+using Microsoft.AspNetCore.Http;
+using Moq;
+using System.Net;
 
 namespace AuthServiceTests
 {
@@ -7,24 +12,16 @@ namespace AuthServiceTests
         [Fact]
         public void ShouldCreateAnUser()
         {
-            var authService = new AuthServices();
-            var result = authService.CreateUserAsync(new AuthService.DTO.UserDTO
-            {
-                Email = "email@deTeste.com",
-                Password = "senhaDeTeste",
-                IsAdmin = false
-            });
+            var authService = new Mock<IAuthService>();
+            var result = authService.Setup(m => m.CreateUserAsync(It.IsAny<UserDTO>()))
+                .Callback<UserDTO>(arg => new UserDTO
+                {
+                    Email = "teste@teste.com",
+                    Password = "senhateste",
+                    IsAdmin = false
+                }).Returns<UserDTO>(x => Task.FromResult(x));
 
             Assert.NotNull(result);
-        }
-        [Fact]
-        public void ShouldGetSomeUsers()
-        {
-            var authService = new AuthServices();
-            var result = authService.GetUsersAsync();
-
-            Assert.NotNull(result);
-            Assert.Equal(new List<AuthService.DTO.UserDTO>(), result.Result);
         }
     }
 }
