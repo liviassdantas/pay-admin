@@ -3,6 +3,7 @@ using AuthService.Interfaces;
 using AuthService.Service;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AuthService.Controller
 {
@@ -34,6 +35,30 @@ namespace AuthService.Controller
                 throw new HttpRequestException(ex.Message, ex.InnerException);
             }
             
+        }
+
+        [HttpGet("GetAllUsers")]
+        public async Task<List<UserDTO>> GetAllUsers()
+        {
+            try
+            {
+               return await _authServices.GetUsersAsync();
+            }catch(Exception ex)
+            {
+                throw new HttpRequestException(ex.Message, ex.InnerException);
+            }
+        }
+
+        [HttpGet("GetOneUser")]
+        public async Task<UserDTO> GetOneUser(string email)
+        {
+            try
+            {
+                return await _authServices.GetOneUserAsync(email);
+            }catch(Exception ex)
+            {
+                throw new HttpRequestException(ex.Message, ex.InnerException);
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using Microsoft.Extensions.Options;
 using AuthService.DTO;
 using AuthService.Interfaces;
+using System.ComponentModel;
 
 namespace AuthService.Service
 {
@@ -19,40 +20,57 @@ namespace AuthService.Service
 
         public async Task CreateUserAsync(UserDTO userDTO)
         {
-            User user = new User
-            {
-                Email = userDTO.Email,
-                Password = userDTO.Password,
-                IsAdmin = userDTO.IsAdmin,
-            };
+            var emailExists = VerifyIfEmailExists(userDTO.Email);
 
-            await _userCollection.InsertOneAsync(user);
+            if (!emailExists)
+            {
+                User user = new User
+                {
+                    Email = userDTO.Email,
+                    Password = userDTO.Password,
+                    IsAdmin = userDTO.IsAdmin,
+                };
+
+                await _userCollection.InsertOneAsync(user);
+            }
+            else
+            {
+                throw new WarningException("This email already exists in our database. Please, try another one.");
+            }
+           
 
         }
 
         public async Task<List<UserDTO>> GetUsersAsync()
         {
-            var ListUserDTO = new List<UserDTO>();
-            var ListUser = await _userCollection.Find(user => true).ToListAsync();
+            var listUserDTO = new List<UserDTO>();
+            var listUser = await _userCollection.Find(user => true).ToListAsync();
 
-            ListUser.ForEach(user => ListUserDTO.Add(new UserDTO {
+            listUser.ForEach(user => listUserDTO.Add(new UserDTO {
                 Email = user.Email, 
                 Password = user.Password, 
                 IsAdmin = user.IsAdmin }));
 
-            return ListUserDTO;
+            return listUserDTO;
         }
 
-        public async Task<UserDTO> GetOneUserAsync(string id)
+        public async Task<UserDTO> GetOneUserAsync(string email)
         {
-            var User = await _userCollection.Find<User>(user => id == user.Id).FirstOrDefaultAsync();
+            var user = await _userCollection.Find<User>(user => email == user.Id).FirstOrDefaultAsync();
             var returnUserDTO = new UserDTO
             {
-                Email = User.Email,
-                Password = User.Password,
-                IsAdmin = User.IsAdmin,
+                Email = user.Email,
+                Password = user.Password,
+                IsAdmin = user.IsAdmin,
             };
             return returnUserDTO;
+        }
+
+        private bool VerifyIfEmailExists (string email)
+        {
+            var emailExist = GetOneUserAsync(email).Result == null ? false : true;
+
+            return emailExist;
         }
 
     }
