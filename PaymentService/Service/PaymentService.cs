@@ -1,6 +1,8 @@
-﻿namespace pay_admin.Service
+﻿using pay_admin.Interfaces;
+
+namespace pay_admin.Service
 {
-    public class PaymentService
+    public class PaymentService : IPaymentService
     {
     }
 }

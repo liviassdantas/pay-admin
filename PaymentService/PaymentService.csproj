@@ -23,7 +23,6 @@
   <ItemGroup>
     <Folder Include="Controller\" />
     <Folder Include="DTO\" />
-    <Folder Include="Interfaces\" />
   </ItemGroup>
 
 </Project>

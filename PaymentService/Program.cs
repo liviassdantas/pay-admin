@@ -1,11 +1,14 @@
 using Microsoft.OpenApi.Models;
+using pay_admin.Interfaces;
+using pay_admin.Model;
+using pay_admin.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<AuthDatabaseSettings>(
+builder.Services.Configure<PaymentsDatabaseSettings>(
     builder.Configuration.GetSection("PaymentsDatabase"));
 
-builder.Services.AddScoped<IAuthService, AuthServices>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.AddControllers();
 
@@ -14,8 +17,8 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "An Authentication Service",
-        Description = "Made a valid login in an API."
+        Title = "A Payment Administrator Service.",
+        Description = "The shoppers and the managers can cancel and create payments transactions."
     });
 });
 var app = builder.Build();
