@@ -60,5 +60,18 @@ namespace AuthService.Controller
                 throw new HttpRequestException(ex.Message, ex.InnerException);
             }
         }
+
+        [HttpGet("Login")]
+        public async Task<UserDTO> Login(string email, string password)
+        {
+            try
+            {
+                return await _authServices.Login(email, password);
+            }
+            catch (Exception ex)
+            {
+                throw new HttpRequestException(ex.Message, ex.InnerException);
+            }
+        }
     }
 }

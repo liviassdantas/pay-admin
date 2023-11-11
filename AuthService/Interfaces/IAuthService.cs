@@ -8,6 +8,6 @@ namespace AuthService.Interfaces
         Task CreateUserAsync(UserDTO userDTO);
         Task<List<UserDTO>> GetUsersAsync();
         Task<UserDTO> GetOneUserAsync(string email);
-
+        Task<UserDTO> Login(string email, string password);
     }
 }

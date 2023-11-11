@@ -68,6 +68,17 @@ namespace AuthService.Service
             return returnUserDTO;
         }
 
+        public async Task<UserDTO> Login(string email, string password)
+        {
+            var user = await _userCollection.Find<User>(user => email == user.Email && password == user.Password).FirstOrDefaultAsync();
+            var returnUserDTO = new UserDTO
+            {
+                Email = user.Email,
+                IsAdmin = user.IsAdmin,
+            };
+            return returnUserDTO;
+        }
+
         private bool VerifyIfEmailExists (string email)
         {
             var emailExist = GetOneUserAsync(email).Result == null ? false : true;
