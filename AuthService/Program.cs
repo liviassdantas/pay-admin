@@ -18,9 +18,8 @@ builder.Services.AddControllers();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
-        options.SlidingExpiration = true;
-        options.AccessDeniedPath = "/Forbidden/";
+        options.Cookie.Name = "PaymentServiceTest";
+        options.LoginPath = "/Login";
     });
 
 builder.Services.AddSwaggerGen(options =>
