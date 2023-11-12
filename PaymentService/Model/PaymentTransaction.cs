@@ -1,7 +1,5 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using pay_admin.Model.Enum;
-using System.Reflection.Metadata;
 
 namespace pay_admin.Model
 {
