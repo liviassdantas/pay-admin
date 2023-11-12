@@ -7,6 +7,9 @@ using System.ComponentModel;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AuthService.Service
 {
@@ -15,96 +18,40 @@ namespace AuthService.Service
         public AuthServices() { }
 
         private readonly IMongoCollection<User> _userCollection;
+        private readonly IConfiguration _configuration;
 
-        public AuthServices(IOptions<AuthDatabaseSettings> authDatabaseSettings)
+        public AuthServices(IConfiguration config)
         {
-            var mongoClient = new MongoClient(authDatabaseSettings.Value.ConnectionString);
-            var mongoDatabase = mongoClient.GetDatabase(authDatabaseSettings.Value.DatabaseName);
-            _userCollection = mongoDatabase.GetCollection<User>(authDatabaseSettings.Value.CollectionName);
+            _configuration = config;
         }
 
-        public async Task CreateUserAsync(UserDTO userDTO)
-        {
-            var emailExists = VerifyIfEmailExists(userDTO.Email);
-
-            if (!emailExists)
-            {
-                User user = new User
-                {
-                    Email = userDTO.Email,
-                    Password = userDTO.Password,
-                    IsAdmin = userDTO.IsAdmin,
-                };
-
-                await _userCollection.InsertOneAsync(user);
-            }
-            else
-            {
-                throw new WarningException("This email already exists in our database. Please, try another one.");
-            }
-
-
-        }
-
-        public async Task<List<UserDTO>> GetUsersAsync()
-        {
-            var listUserDTO = new List<UserDTO>();
-            var listUser = await _userCollection.Find(user => true).ToListAsync();
-
-            listUser.ForEach(user => listUserDTO.Add(new UserDTO
-            {
-                Email = user.Email,
-                IsAdmin = user.IsAdmin
-            }));
-
-            return listUserDTO;
-        }
-
-        public async Task<UserDTO> GetOneUserAsync(string email)
-        {
-            var user = await _userCollection.Find<User>(user => email == user.Email).FirstOrDefaultAsync();
-            var returnUserDTO = new UserDTO
-            {
-                Email = user.Email,
-                IsAdmin = user.IsAdmin,
-            };
-            return returnUserDTO;
-        }
-
-        public async Task<HttpResponseMessage> Login(HttpContext httpContext, string email, string password)
+        public async Task<string> GenerateToken(UserDTO user)
         {
             try
             {
-                var user = await _userCollection.Find<User>(user => email == user.Email && password == user.Password).FirstOrDefaultAsync();
-
-                var claims = new List<Claim>
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var secretConfig = _configuration.GetSection("SettingsJWT");
+                var key = Encoding.ASCII.GetBytes(secretConfig.Value);
+                var tokenDescriptor = new SecurityTokenDescriptor
                 {
-                new Claim(ClaimTypes.Name, user.Email),
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.IsAdmin == true ? "Administrator" : "Seller")
+                    Subject = new ClaimsIdentity(new Claim[]
+                    {
+                        new Claim(ClaimTypes.Name, user.Email.ToString()),
+                        new Claim(ClaimTypes.Email, user.Email.ToString()),
+                        new Claim(ClaimTypes.Role, user.IsAdmin == true ? "Administrator" : "Seller")
+                    }),
+                    Expires = DateTime.UtcNow.AddHours(2),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };
-                var claimsIdentity = new ClaimsIdentity(claims,
-                                         CookieAuthenticationDefaults.AuthenticationScheme);
-                await httpContext.SignInAsync(
-                      CookieAuthenticationDefaults.AuthenticationScheme,
-                      new ClaimsPrincipal(claimsIdentity),
-                      new AuthenticationProperties { IsPersistent = true });
+                var token = tokenHandler.CreateToken(tokenDescriptor);
 
-                return new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+                return tokenHandler.WriteToken(token);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new HttpRequestException(ex.Message);
+                throw new Exception("Can't login, please, try again another time");
             }
-        }
-
-        private bool VerifyIfEmailExists(string email)
-        {
-            var emailExist = GetOneUserAsync(email).Result == null ? false : true;
-
-            return emailExist;
         }
 
     }

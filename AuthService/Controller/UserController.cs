@@ -9,13 +9,13 @@ namespace AuthService.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly IAuthService _authServices;
+        private readonly IUserService _userServices;
 
-        public AuthController (IAuthService authServices)
+        public UserController (IUserService userServices)
         {
-            _authServices = authServices;
+            _userServices = userServices;
         }
 
         [HttpPost("CreateUser")]
@@ -23,7 +23,7 @@ namespace AuthService.Controller
         {
             try
             {
-                await _authServices.CreateUserAsync(userDTO);
+                await _userServices.CreateUserAsync(userDTO);
 
                 return new ObjectResult(userDTO)
                 {
@@ -42,7 +42,7 @@ namespace AuthService.Controller
         {
             try
             {
-               return await _authServices.GetUsersAsync();
+               return await _userServices.GetUsersAsync();
             }catch(Exception ex)
             {
                 throw new HttpRequestException(ex.Message, ex.InnerException);
@@ -54,7 +54,7 @@ namespace AuthService.Controller
         {
             try
             {
-                return await _authServices.GetOneUserAsync(email);
+                return await _userServices.GetOneUserAsync(email);
             }catch(Exception ex)
             {
                 throw new HttpRequestException(ex.Message, ex.InnerException);
@@ -66,7 +66,7 @@ namespace AuthService.Controller
         {
             try
             {
-                return await _authServices.Login(this.HttpContext, email, password);
+                return await _userServices.Login(this.HttpContext, email, password);
             }
             catch (Exception ex)
             {

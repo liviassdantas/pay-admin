@@ -2,27 +2,43 @@ using AuthService.Interfaces;
 using AuthService.Model;
 using AuthService.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<AuthDatabaseSettings>(
-    builder.Configuration.GetSection("AuthDatabase"));
+builder.Services.Configure<DatabaseSettings>(
+    builder.Configuration.GetSection("UserDatabase"));
 
-builder.Services.AddScoped<IAuthService, AuthServices>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddSingleton<IAuthService, AuthServices>();
 
 builder.Services.AddControllers();
+builder.Services.AddCors();
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
+var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("SettingsJWT").Value);
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
     {
-        options.Cookie.Name = "PaymentServiceTest";
-        options.LoginPath = "/";
-        options.Cookie.Path = "/";
-    });
-
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -49,7 +65,11 @@ app.UseSwaggerUI(options =>
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict });
+app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
 app.MapControllers();
 
 app.Run();
