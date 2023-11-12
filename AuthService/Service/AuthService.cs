@@ -80,6 +80,8 @@ namespace AuthService.Service
                 var claims = new List<Claim>
                 {
                 new Claim(ClaimTypes.Name, user.Email),
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
+                new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.IsAdmin == true ? "Administrator" : "Seller")
                 };
                 var claimsIdentity = new ClaimsIdentity(claims,

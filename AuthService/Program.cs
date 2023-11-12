@@ -19,7 +19,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(options =>
     {
         options.Cookie.Name = "PaymentServiceTest";
-        options.LoginPath = "/Login";
+        options.LoginPath = "/";
+        options.Cookie.Path = "/";
     });
 
 builder.Services.AddSwaggerGen(options =>
