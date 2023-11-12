@@ -62,11 +62,11 @@ namespace AuthService.Controller
         }
 
         [HttpGet("Login")]
-        public async Task<UserDTO> Login(string email, string password)
+        public async Task<HttpResponseMessage> Login(string email, string password)
         {
             try
             {
-                return await _authServices.Login(email, password);
+                return await _authServices.Login(this.HttpContext, email, password);
             }
             catch (Exception ex)
             {

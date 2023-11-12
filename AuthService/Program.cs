@@ -1,6 +1,7 @@
 using AuthService.Interfaces;
 using AuthService.Model;
 using AuthService.Service;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
 using Swashbuckle;
@@ -14,7 +15,13 @@ builder.Services.AddScoped<IAuthService, AuthServices>();
 
 builder.Services.AddControllers();
 
-builder.Services.AddAuthentication().AddJwtBearer();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        options.SlidingExpiration = true;
+        options.AccessDeniedPath = "/Forbidden/";
+    });
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -39,6 +46,10 @@ app.UseSwaggerUI(options =>
     options.RoutePrefix = string.Empty;
 });
 
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict });
 app.MapControllers();
 
 app.Run();
