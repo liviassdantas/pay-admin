@@ -83,12 +83,12 @@ namespace pay_admin.Service
         private static Dictionary<string, string> GetLoggedUser(HttpContext context)
         {
             var loggedUser = new Dictionary<string, string>(); 
-            if (context.User.Identity?.Name != null)
+            if (context.User.Identities.FirstOrDefault(x => String.IsNullOrEmpty(x.NameClaimType)) != null)
             {
                 var userIdentity = new
                 {
-                    Email = context.User.Identity.Name,
-                    Role = context.User?.Claims?.FirstOrDefault(x => x?.Type == ClaimTypes.Role)?.ValueType ?? ""
+                    Email = context.User?.Claims?.FirstOrDefault(x => x?.Type == ClaimsIdentity.DefaultNameClaimType)?.ValueType ?? "",
+                    Role = context.User?.Claims?.FirstOrDefault(x => x?.Type == ClaimsIdentity.DefaultRoleClaimType)?.ValueType ?? ""
                 };
                 loggedUser.Add(userIdentity.Email, userIdentity.Role);
                 

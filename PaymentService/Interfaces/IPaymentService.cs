@@ -1,6 +1,9 @@
-﻿namespace pay_admin.Interfaces
+﻿using pay_admin.DTO;
+
+namespace pay_admin.Interfaces
 {
     public interface IPaymentService
     {
+        Task<HttpResponseMessage> CreateNewBilling(HttpContext context, PaymentTransactionDTO billing);
     }
 }
