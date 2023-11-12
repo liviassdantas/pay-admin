@@ -75,6 +75,7 @@ namespace AuthService.Service
             {
                 Email = user.Email,
                 IsAdmin = user.IsAdmin,
+                UserID = user.Id
             };
             return returnUserDTO;
         }
