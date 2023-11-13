@@ -49,24 +49,13 @@ namespace AuthService.Controller
             }
         }
 
-        [HttpGet("GetOneUser")]
-        public async Task<UserDTO> GetOneUser(string email)
-        {
-            try
-            {
-                return await _userServices.GetOneUserAsync(email);
-            }catch(Exception ex)
-            {
-                throw new HttpRequestException(ex.Message, ex.InnerException);
-            }
-        }
 
-        [HttpGet("Login")]
-        public async Task<HttpResponseMessage> Login(string email, string password)
+        [HttpPost("Login")]
+        public async Task<ActionResult<dynamic>> Login(string email, string password)
         {
             try
             {
-                return await _userServices.Login(this.HttpContext, email, password);
+                return await _userServices.Login(email, password);
             }
             catch (Exception ex)
             {

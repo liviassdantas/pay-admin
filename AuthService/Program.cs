@@ -16,13 +16,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<DatabaseSettings>(
     builder.Configuration.GetSection("UserDatabase"));
 
+var secret = builder.Services.Configure<Settings>(builder.Configuration.GetSection("SettingsJWT")).ToString();
+
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddSingleton<IAuthService, AuthServices>();
 
 builder.Services.AddControllers();
 builder.Services.AddCors();
 
-var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("SettingsJWT").Value);
+var key = Encoding.ASCII.GetBytes(secret);
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

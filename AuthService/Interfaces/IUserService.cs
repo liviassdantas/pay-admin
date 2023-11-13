@@ -1,4 +1,5 @@
 ﻿using AuthService.DTO;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AuthService.Interfaces
 {
@@ -7,5 +8,6 @@ namespace AuthService.Interfaces
         Task CreateUserAsync(UserDTO userDTO);
         Task<List<UserDTO>> GetUsersAsync();
         Task<UserDTO> GetOneUserAsync(string email);
+        Task<ActionResult<dynamic>> Login(string email, string password);
     }
 }

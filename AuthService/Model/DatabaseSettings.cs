@@ -1,6 +1,6 @@
 ﻿namespace AuthService.Model
 {
-    public abstract class DatabaseSettings
+    public class DatabaseSettings
     {
         public string ConnectionString { get; set; } = null!;
         public string DatabaseName { get; set; } = null!;
