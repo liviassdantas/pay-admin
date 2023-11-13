@@ -17,21 +17,13 @@ namespace AuthService.Service
     {
         public AuthServices() { }
 
-        private readonly IMongoCollection<User> _userCollection;
-        private readonly IConfiguration _configuration;
-
-        public AuthServices(IConfiguration config)
-        {
-            _configuration = config;
-        }
-
         public async Task<string> GenerateToken(UserDTO user)
         {
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var secretConfig = _configuration.GetSection("SettingsJWT");
-                var key = Encoding.ASCII.GetBytes(secretConfig.Value);
+                var secretConfig = new Settings().Secret;
+                var key = Encoding.ASCII.GetBytes(secretConfig);
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[]

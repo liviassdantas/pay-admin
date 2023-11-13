@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<DatabaseSettings>(
     builder.Configuration.GetSection("UserDatabase"));
 
-var secret = builder.Services.Configure<Settings>(builder.Configuration.GetSection("SettingsJWT")).ToString();
+var secret = new Settings().Secret;
 
 builder.Services.AddScoped<IUserService, UserService>();
 
