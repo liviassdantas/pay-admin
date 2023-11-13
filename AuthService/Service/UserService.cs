@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System.ComponentModel;
+using System.Net.Http.Headers;
 
 namespace AuthService.Service
 {
@@ -90,8 +91,9 @@ namespace AuthService.Service
             {
                 return new NotFoundObjectResult(new { message = "User or password is invalid" });
             }
-            var token = await _authService.GenerateToken(user);
+            var token = await new AuthServices().GenerateToken(user);
             user.Password = "";
+
             return new
             {
                 token = token,

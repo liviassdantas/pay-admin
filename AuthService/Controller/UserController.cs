@@ -1,6 +1,7 @@
 ﻿using AuthService.DTO;
 using AuthService.Interfaces;
 using AuthService.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -8,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace AuthService.Controller
 {
     [Route("api/[controller]")]
+    [Authorize("Bearer")]
     [ApiController]
     public class UserController : ControllerBase
     {
