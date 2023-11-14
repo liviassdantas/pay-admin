@@ -5,6 +5,7 @@ using pay_admin.Interfaces;
 
 namespace pay_admin.Controller
 {
+   
     [Route("api/[controller]")]
     [ApiController]
     public class PaymentTransactionController : ControllerBase
@@ -16,6 +17,7 @@ namespace pay_admin.Controller
             _paymentService = paymentService;
         }
 
+        [Authorize]
         [HttpPost("CreateNewBilling")]
         public async Task<IActionResult> CreateNewBilling()
         {

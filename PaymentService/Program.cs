@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using pay_admin.Interfaces;
@@ -18,17 +19,20 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.AddControllers();
 
-var key = Encoding.ASCII.GetBytes(config["JWTConfig:Secret"]);
+
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;  
 }).AddJwtBearer(x =>
 {
     x.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
+       
+        IssuerSigningKey = new SymmetricSecurityKey((Encoding.UTF8.GetBytes(config["JWTConfig:Secret"]!))),
+        //ValidateLifetime = true,
+        //ValidateIssuerSigningKey = true
         ValidateIssuer = false,
         ValidateAudience = false
     };
