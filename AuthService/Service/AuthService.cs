@@ -29,7 +29,8 @@ namespace AuthService.Service
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                         new Claim(ClaimTypes.Name, user.Email.ToString()),
-                        new Claim(ClaimTypes.Email, user.Email.ToString())
+                        new Claim(ClaimTypes.Email, user.Email.ToString()),
+                        new Claim(ClaimTypes.Role, user.IsAdmin == true ? "Admin" : "Seller")
                     }),
                     Expires = DateTime.UtcNow.AddHours(6),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

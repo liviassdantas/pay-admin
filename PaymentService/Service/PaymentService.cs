@@ -50,7 +50,7 @@ namespace pay_admin.Service
                         var paymentTransaction = new PaymentTransaction
                         {
                             TransactionID = result.ID,
-                            UserID = "",
+                            UserID = loggedUser.UserID,
                             PaymentStatus = result.status,
                             QrCode = result.qrCode,
                         };
@@ -74,17 +74,17 @@ namespace pay_admin.Service
 
         }
 
-        private static Dictionary<string, string> GetLoggedUser(HttpContext context)
+        private static PaymentTransactionDTO GetLoggedUser(HttpContext context)
         {
-            var loggedUser = new Dictionary<string, string>(); 
-            if (context.User.Identities.FirstOrDefault(x => String.IsNullOrEmpty(x.NameClaimType)) != null)
+            var loggedUser = new PaymentTransactionDTO(); 
+            if (!String.IsNullOrEmpty(context?.User?.Identity?.Name))
             {
                 var userIdentity = new
                 {
-                    Email = context.User?.Claims?.FirstOrDefault(x => x?.Type == ClaimsIdentity.DefaultNameClaimType)?.ValueType ?? "",
-                    Role = context.User?.Claims?.FirstOrDefault(x => x?.Type == ClaimsIdentity.DefaultRoleClaimType)?.ValueType ?? ""
+                    Email = context.User?.Claims?.FirstOrDefault(x => x?.Type == ClaimTypes.Name)?.Value ?? "",
+                    Role = context.User?.Claims?.FirstOrDefault(x => x?.Type == ClaimTypes.Role)?.Value ?? ""
                 };
-                loggedUser.Add(userIdentity.Email, userIdentity.Role);
+                loggedUser.UserID = userIdentity.Email;
                 
                 return loggedUser;
             }
