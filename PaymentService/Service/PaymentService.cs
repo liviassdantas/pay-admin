@@ -31,13 +31,12 @@ namespace pay_admin.Service
             _paymentTransactionCollection = mongoDatabase.GetCollection<PaymentTransaction>(paymentDatabaseSettings.Value.CollectionName);
         }
 
-        public async Task<HttpResponseMessage> CreateNewBilling(HttpContext context, PaymentTransactionDTO billing)
+        public async Task<HttpResponseMessage> CreateNewBilling(HttpContext context)
         {
             try
             {
                 var returnStatus = new HttpStatusCode();
                 var loggedUser = GetLoggedUser(context);
-                billing.UserID = loggedUser.FirstOrDefault().Key;
 
                 var createBillingApi = await client.PostAsync("https://eoc56jqea5ysq7e.m.pipedream.net", JsonContent.Create(new { value = 10.8 }));
                 
@@ -48,17 +47,12 @@ namespace pay_admin.Service
 
                     if (!String.IsNullOrEmpty(result?.ID))
                     {
-                        billing.PaymentStatus = result.status;
-                        billing.TransactionID = result.ID;
-                        billing.QrCode = result.qrCode;
-                        billing.PaymentStatus = result.status;
-
                         var paymentTransaction = new PaymentTransaction
                         {
-                            TransactionID = billing.TransactionID,
-                            UserID = billing.UserID,
-                            PaymentStatus = billing.PaymentStatus,
-                            QrCode = billing.QrCode,
+                            TransactionID = result.ID,
+                            UserID = "",
+                            PaymentStatus = result.status,
+                            QrCode = result.qrCode,
                         };
 
                         await _paymentTransactionCollection.InsertOneAsync(paymentTransaction);

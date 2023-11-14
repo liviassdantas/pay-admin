@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using pay_admin.DTO;
 using pay_admin.Interfaces;
 
 namespace pay_admin.Controller
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class PaymentTransactionController : ControllerBase
     {
         private readonly IPaymentService _paymentService;
@@ -14,16 +17,13 @@ namespace pay_admin.Controller
         }
 
         [HttpPost("CreateNewBilling")]
-        public async Task<IActionResult> CreateNewBilling(PaymentTransactionDTO paymentTransactionDTO)
+        public async Task<IActionResult> CreateNewBilling()
         {
             try
             {
-                await _paymentService.CreateNewBilling(this.HttpContext, paymentTransactionDTO);
+                await _paymentService.CreateNewBilling(this.HttpContext);
 
-                return new ObjectResult(paymentTransactionDTO)
-                {
-                    StatusCode = StatusCodes.Status201Created
-                };
+                return CreatedAtAction("CreateNewBilling", StatusCodes.Status201Created);
 
             }
             catch (Exception ex)

@@ -9,7 +9,6 @@ using Microsoft.IdentityModel.Tokens;
 namespace AuthService.Controller
 {
     [Route("api/[controller]")]
-    [Authorize("Bearer")]
     [ApiController]
     public class UserController : ControllerBase
     {
