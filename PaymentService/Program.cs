@@ -24,15 +24,12 @@ builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;  
+    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(x =>
 {
     x.TokenValidationParameters = new TokenValidationParameters
     {
-       
         IssuerSigningKey = new SymmetricSecurityKey((Encoding.UTF8.GetBytes(config["JWTConfig:Secret"]!))),
-        //ValidateLifetime = true,
-        //ValidateIssuerSigningKey = true
         ValidateIssuer = false,
         ValidateAudience = false
     };
@@ -45,6 +42,31 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1",
         Title = "A Payment Administrator Service.",
         Description = "The shoppers and the managers can cancel and create payments transactions."
+    });
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description =   "JWT Authorization Header - using Bearer Authentication.\r\n\r\n" +
+                        "Press 'Bearer' [space] and your token bellow.\r\n\r\n" +
+                        "Like this: 'Bearer 12345abcdef'",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+           {
+               new OpenApiSecurityScheme
+               {
+                   Reference = new OpenApiReference
+                   {
+                       Type = ReferenceType.SecurityScheme,
+                       Id = "Bearer"
+                   }
+               },
+               Array.Empty<string>()
+           }
     });
 });
 var app = builder.Build();

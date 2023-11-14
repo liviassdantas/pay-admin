@@ -45,18 +45,27 @@ namespace pay_admin.Service
                     var resultJson = await createBillingApi.Content.ReadAsStringAsync();
                     var result = JsonSerializer.Deserialize<ResponseFromBillingApiDTO>(resultJson);
 
-                    if (!String.IsNullOrEmpty(result?.ID))
+                    if (!String.IsNullOrEmpty(result?.qrCode))
                     {
                         var paymentTransaction = new PaymentTransaction
                         {
-                            TransactionID = result.ID,
+                            TransactionID = result.Id,
                             UserID = loggedUser.UserID,
                             PaymentStatus = result.status,
                             QrCode = result.qrCode,
                         };
 
-                        await _paymentTransactionCollection.InsertOneAsync(paymentTransaction);
-                        returnStatus = HttpStatusCode.Created;
+                        var saveAsync = _paymentTransactionCollection.InsertOneAsync(paymentTransaction);
+                        saveAsync.Wait();
+
+                        if(saveAsync.IsCompletedSuccessfully)
+                        {
+                            returnStatus = HttpStatusCode.Created;
+                        }
+                        else
+                        {
+                            returnStatus = HttpStatusCode.InternalServerError;
+                        }
                     }
                     else
                     {

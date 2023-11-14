@@ -3,7 +3,7 @@
     public class ResponseFromBillingApiDTO
     {
         public string message { get; set; }
-        public string ID { get; set; }
+        public string Id { get; set; }
         public DateTime timestamp { get; set; }
         public string status { get; set; }
         public string qrCode { get; set; }
