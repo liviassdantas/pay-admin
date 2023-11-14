@@ -34,5 +34,22 @@ namespace pay_admin.Controller
             }
 
         }
+        [Authorize]
+        [HttpPost("CancelABilling")]
+        public async Task<IActionResult> CancelABilling()
+        {
+            try
+            {
+                await _paymentService.CancelABilling(this.HttpContext);
+
+                return CreatedAtAction("CancelABilling", StatusCodes.Status200OK);
+
+            }
+            catch (Exception ex)
+            {
+                throw new HttpRequestException(ex.Message, ex.InnerException);
+            }
+
+        }
     }
 }

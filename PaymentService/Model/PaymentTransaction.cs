@@ -20,6 +20,10 @@ namespace pay_admin.Model
 
         [BsonElement("QrCode")]
         public string QrCode { get; set; }
+        [BsonElement("CreatedAt")]
+        public DateTime CreatedAt { get; set; }
+        [BsonElement("UpdatedAt")]
+        public DateTime UpdatedAt { get; set; }
 
     }
 }
