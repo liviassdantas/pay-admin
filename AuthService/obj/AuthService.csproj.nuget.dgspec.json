@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\livia\\OneDrive\\Documentos\\GitHub\\pay-admin\\AuthService\\AuthService.csproj": {}
+    "C:\\Users\\livia\\source\\repos\\pay-admin\\AuthService\\AuthService.csproj": {}
   },
   "projects": {
-    "C:\\Users\\livia\\OneDrive\\Documentos\\GitHub\\pay-admin\\AuthService\\AuthService.csproj": {
+    "C:\\Users\\livia\\source\\repos\\pay-admin\\AuthService\\AuthService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\livia\\OneDrive\\Documentos\\GitHub\\pay-admin\\AuthService\\AuthService.csproj",
+        "projectUniqueName": "C:\\Users\\livia\\source\\repos\\pay-admin\\AuthService\\AuthService.csproj",
         "projectName": "AuthService",
-        "projectPath": "C:\\Users\\livia\\OneDrive\\Documentos\\GitHub\\pay-admin\\AuthService\\AuthService.csproj",
+        "projectPath": "C:\\Users\\livia\\source\\repos\\pay-admin\\AuthService\\AuthService.csproj",
         "packagesPath": "C:\\Users\\livia\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\livia\\OneDrive\\Documentos\\GitHub\\pay-admin\\AuthService\\obj\\",
+        "outputPath": "C:\\Users\\livia\\source\\repos\\pay-admin\\AuthService\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\livia\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -92,7 +92,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }
