@@ -22,3 +22,12 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "pay-admin.dll"]
+
+FROM alpine:3.19.1
+RUN apk add openjdk11
+COPY kafka_2.13-3.6.1.tgz .
+RUN tar -xvf 'kafka_2.13-3.6.1.tgz'
+RUN mv ./kafka_2.13-3.6.1 /opt/
+WORKDIR /opt/kafka_2.13-3.6.1
+ENV PATH /sbin:/opt/kafka_2.13-3.6.1/bin/:$PATH
+CMD ["kafka-server-start.sh", "config/server.properties"]
