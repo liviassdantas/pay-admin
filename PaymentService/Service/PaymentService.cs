@@ -41,6 +41,7 @@ namespace pay_admin.Service
 
                 if (loggedUser.IsUserAdmin)
                 {
+                    //consertar isso pra não consumir mais desse link
                     var cancelBillingApi = await client.PostAsync("https://eo45xtt0qoks1ru.m.pipedream.net", JsonContent.Create(new { id = "2Vt9yiDUF2h7vxdSD3qUuzCvKwR" }));
 
                     if (cancelBillingApi.IsSuccessStatusCode && cancelBillingApi.Content != null)

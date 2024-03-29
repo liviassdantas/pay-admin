@@ -9,7 +9,7 @@ namespace pay_admin.DTO
 
         public string PaymentStatus { get; set; }
 
-        public string QrCode { get; set; }
+        public double Value { get; set; }
         public bool IsUserAdmin { get; set; }
     }
 }

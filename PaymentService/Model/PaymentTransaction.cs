@@ -18,8 +18,8 @@ namespace pay_admin.Model
         [BsonElement("PaymentStatus")]
         public string PaymentStatus { get; set; }
 
-        [BsonElement("QrCode")]
-        public string QrCode { get; set; }
+        [BsonElement("Value")]
+        public double Value { get; set; }
         [BsonElement("CreatedAt")]
         public DateTime CreatedAt { get; set; }
         [BsonElement("UpdatedAt")]
