@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Newtonsoft.Json.Linq;
 using pay_admin.DTO;
 using pay_admin.Interfaces;
 using pay_admin.Model;
@@ -22,8 +23,8 @@ namespace pay_admin.Service
         public PaymentService() { }
 
         private readonly IMongoCollection<PaymentTransaction> _paymentTransactionCollection;
+        private readonly KafkaProducerService _kafkaProducerService;
         private static HttpClient client = new();
-        
 
         public PaymentService(IOptions<PaymentsDatabaseSettings> paymentDatabaseSettings)
         {
@@ -162,6 +163,7 @@ namespace pay_admin.Service
                 throw new WarningException("Seems you are not logged. Try to do the login to use the system.");
             }
         }
+
 
     }
 }

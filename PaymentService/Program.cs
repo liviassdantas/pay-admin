@@ -15,7 +15,7 @@ var config = builder.Configuration;
 builder.Services.Configure<PaymentsDatabaseSettings>(
     builder.Configuration.GetSection("PaymentsDatabase"));
 
-builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddSingleton<IPaymentService, PaymentService>();
 
 builder.Services.AddControllers();
 
