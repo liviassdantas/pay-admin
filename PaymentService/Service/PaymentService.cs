@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Confluent.Kafka;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -60,6 +61,13 @@ namespace pay_admin.Service
 
                     if (updateAsync.IsCompletedSuccessfully)
                     {
+                        var message = string.Format("user: {0}, transactionID: {1}, paymentStatus: {2}",
+                            loggedUser.UserID, getBillingFromDatabase.TransactionID, EPaymentStatus.Canceled);
+                        await _kafkaProducerService.ProduceMessageAsync("CancelABilling", new Message<string, string>
+                        {
+                            Key = Guid.NewGuid().ToString(),
+                            Value = JsonSerializer.Serialize(message)
+                        });
                         returnStatus = HttpStatusCode.OK;
                     }
                     else
@@ -101,6 +109,13 @@ namespace pay_admin.Service
 
                 if (saveAsync.IsCompletedSuccessfully)
                 {
+                    var message = string.Format("user: {0}, transactionID: {1}, paymentStatus: {2}",
+                           loggedUser.UserID, paymentTransaction.TransactionID, paymentTransaction.PaymentStatus);
+                    await _kafkaProducerService.ProduceMessageAsync("CreateABilling", new Message<string, string>
+                    {
+                        Key = Guid.NewGuid().ToString(),
+                        Value = JsonSerializer.Serialize(message)
+                    });
                     returnStatus = HttpStatusCode.Created;
                 }
                 else
