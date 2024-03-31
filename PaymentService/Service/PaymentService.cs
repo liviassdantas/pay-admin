@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Protocols;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json.Linq;
 using pay_admin.DTO;
 using pay_admin.Interfaces;
 using pay_admin.Model;
+using pay_admin.Model.ValueObjects.Enums;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -23,7 +26,7 @@ namespace pay_admin.Service
         public PaymentService() { }
 
         private readonly IMongoCollection<PaymentTransaction> _paymentTransactionCollection;
-        private readonly KafkaProducerService _kafkaProducerService;
+        private readonly KafkaProducerService _kafkaProducerService = new KafkaProducerService("localhost:29092");
         private static HttpClient client = new();
 
         public PaymentService(IOptions<PaymentsDatabaseSettings> paymentDatabaseSettings)
@@ -42,45 +45,33 @@ namespace pay_admin.Service
 
                 if (loggedUser.IsUserAdmin)
                 {
-                    //consertar isso pra não consumir mais desse link
-                    var cancelBillingApi = await client.PostAsync("https://eo45xtt0qoks1ru.m.pipedream.net", JsonContent.Create(new { id = "2Vt9yiDUF2h7vxdSD3qUuzCvKwR" }));
-
-                    if (cancelBillingApi.IsSuccessStatusCode && cancelBillingApi.Content != null)
+                    var paymentTransaction = new PaymentTransaction
                     {
-                        var resultJson = await cancelBillingApi.Content.ReadAsStringAsync();
-                        var result = JsonSerializer.Deserialize<ResponseFromBillingApiDTO>(resultJson);
+                        UserID = loggedUser.UserID,
+                        PaymentStatus = EPaymentStatus.Canceled,
+                        UpdatedAt = DateTime.UtcNow
+                    };
+                    var getBillingFromDatabase = await _paymentTransactionCollection.Find(bill => bill.UserID == loggedUser.UserID && bill.PaymentStatus == EPaymentStatus.Pending).FirstOrDefaultAsync();
+                    var filters = Builders<PaymentTransaction>.Filter.Eq(payment => payment, getBillingFromDatabase);
+                    var update = Builders<PaymentTransaction>.Update.Set(updt => updt, paymentTransaction);
 
-                        if (!String.IsNullOrEmpty(result?.message) && result?.status == "Canceled")
-                        {
-                            var paymentTransaction = new PaymentTransaction
-                            {
-                                UserID = loggedUser.UserID,
-                                PaymentStatus = result.status,
-                                UpdatedAt = DateTime.UtcNow
-                            };
-                            var getBillingFromDatabase = await _paymentTransactionCollection.Find(bill => bill.UserID == loggedUser.UserID && bill.PaymentStatus == "Pending").FirstOrDefaultAsync();
-                            var filters = Builders<PaymentTransaction>.Filter.Eq(payment => payment, getBillingFromDatabase);
-                            var update = Builders<PaymentTransaction>.Update.Set(updt => updt, paymentTransaction);
+                    var updateAsync = _paymentTransactionCollection.UpdateOneAsync(filters, update);
+                    updateAsync.Wait();
 
-                            var updateAsync = _paymentTransactionCollection.UpdateOneAsync(filters, update);
-                            updateAsync.Wait();
-
-                            if (updateAsync.IsCompletedSuccessfully)
-                            {
-                                returnStatus = HttpStatusCode.OK;
-                            }
-                            else
-                            {
-                                returnStatus = HttpStatusCode.InternalServerError;
-                            }
-                        }
-                        else
-                        {
-                            returnStatus = HttpStatusCode.BadRequest;
-                        }
-
-                    } 
+                    if (updateAsync.IsCompletedSuccessfully)
+                    {
+                        returnStatus = HttpStatusCode.OK;
+                    }
+                    else
+                    {
+                        returnStatus = HttpStatusCode.InternalServerError;
+                    }
                 }
+                else
+                {
+                    returnStatus = HttpStatusCode.BadRequest;
+                }
+
                 return new HttpResponseMessage(returnStatus);
             }
             catch (Exception ex)
@@ -97,42 +88,26 @@ namespace pay_admin.Service
                 var returnStatus = new HttpStatusCode();
                 var loggedUser = GetLoggedUser(context);
 
-                var createBillingApi = await client.PostAsync("https://eoc56jqea5ysq7e.m.pipedream.net", JsonContent.Create(new { value = 10.8 }));
-                
-                if(createBillingApi.IsSuccessStatusCode && createBillingApi.Content != null)
+                var paymentTransaction = new PaymentTransaction
                 {
-                    var resultJson = await createBillingApi.Content.ReadAsStringAsync();
-                    var result = JsonSerializer.Deserialize<ResponseFromBillingApiDTO>(resultJson);
+                    TransactionID = Guid.NewGuid().ToString(),
+                    UserID = loggedUser.UserID,
+                    PaymentStatus = EPaymentStatus.Pending,
+                    CreatedAt = DateTime.Now,
+                };
 
-                    if (!String.IsNullOrEmpty(result?.qrCode))
-                    {
-                        var paymentTransaction = new PaymentTransaction
-                        {
-                            TransactionID = result.Id,
-                            UserID = loggedUser.UserID,
-                            PaymentStatus = result.status,
-                            QrCode = result.qrCode,
-                            CreatedAt = result.timestamp
-                        };
+                var saveAsync = _paymentTransactionCollection.InsertOneAsync(paymentTransaction);
+                saveAsync.Wait();
 
-                        var saveAsync = _paymentTransactionCollection.InsertOneAsync(paymentTransaction);
-                        saveAsync.Wait();
-
-                        if(saveAsync.IsCompletedSuccessfully)
-                        {
-                            returnStatus = HttpStatusCode.Created;
-                        }
-                        else
-                        {
-                            returnStatus = HttpStatusCode.InternalServerError;
-                        }
-                    }
-                    else
-                    {
-                        returnStatus = HttpStatusCode.BadRequest;
-                    }
-                    
+                if (saveAsync.IsCompletedSuccessfully)
+                {
+                    returnStatus = HttpStatusCode.Created;
                 }
+                else
+                {
+                    returnStatus = HttpStatusCode.InternalServerError;
+                }
+
                 return new HttpResponseMessage(returnStatus);
             }
             catch (Exception ex)
@@ -145,7 +120,7 @@ namespace pay_admin.Service
 
         private static PaymentTransactionDTO GetLoggedUser(HttpContext context)
         {
-            var loggedUser = new PaymentTransactionDTO(); 
+            var loggedUser = new PaymentTransactionDTO();
             if (!String.IsNullOrEmpty(context?.User?.Identity?.Name))
             {
                 var userIdentity = new
@@ -155,7 +130,7 @@ namespace pay_admin.Service
                 };
                 loggedUser.UserID = userIdentity.Email;
                 loggedUser.IsUserAdmin = userIdentity.Role == "Admin" ? true : false;
-                
+
                 return loggedUser;
             }
             else

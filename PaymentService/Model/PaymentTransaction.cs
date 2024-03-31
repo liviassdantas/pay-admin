@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using pay_admin.Model.ValueObjects.Enums;
 
 namespace pay_admin.Model
 {
@@ -16,7 +17,7 @@ namespace pay_admin.Model
         public string TransactionID { get; set; }
 
         [BsonElement("PaymentStatus")]
-        public string PaymentStatus { get; set; }
+        public EPaymentStatus PaymentStatus { get; set; }
 
         [BsonElement("Value")]
         public double Value { get; set; }
