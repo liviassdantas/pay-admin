@@ -8,7 +8,7 @@ namespace pay_admin.Service
     public class KafkaProducerService : IMessagesService
     {
         private readonly IProducer<string, string> _producer;
-
+        public KafkaProducerService() { }
         public KafkaProducerService(string bootstrapServers)
         {
             var config = new ProducerConfig { BootstrapServers = bootstrapServers };
