@@ -16,7 +16,7 @@ builder.Services.Configure<PaymentsDatabaseSettings>(
     builder.Configuration.GetSection("PaymentsDatabase"));
 
 builder.Services.AddSingleton<IPaymentService, PaymentService>();
-builder.Services.AddSingleton<IMessagesService, KafkaProducerService>();
+builder.Services.AddSingleton<IMessagesProducerService, KafkaProducerService>();
 
 builder.Services.AddControllers();
 

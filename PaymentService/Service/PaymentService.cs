@@ -133,6 +133,11 @@ namespace pay_admin.Service
 
         }
 
+        //public async Task<ConsultBillingDTO> ConsultBilling(ConsulterDTO consulter)
+        //{
+
+        //}
+
         private static PaymentTransactionDTO GetLoggedUser(HttpContext context)
         {
             var loggedUser = new PaymentTransactionDTO();

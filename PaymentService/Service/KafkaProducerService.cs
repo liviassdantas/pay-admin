@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace pay_admin.Service
 {
-    public class KafkaProducerService : IMessagesService
+    public class KafkaProducerService : IMessagesProducerService
     {
         private readonly IProducer<string, string> _producer;
         public KafkaProducerService() { }
