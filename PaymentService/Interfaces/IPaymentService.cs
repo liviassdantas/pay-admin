@@ -6,6 +6,6 @@ namespace pay_admin.Interfaces
     {
         Task<HttpResponseMessage> CreateNewBilling(HttpContext context);
         Task<HttpResponseMessage> CancelABilling(HttpContext context);
-        //Task<ConsultBillingDTO> ConsultBilling(HttpContext context);
+
     }
 }

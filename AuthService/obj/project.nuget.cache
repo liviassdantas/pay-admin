@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "6hKdVMUNKo0iAvQieyUMtqYENR8l9PTKo0xYJo6K8R/xqihbFMdCFjmDOW04L5/OH9CV2TfdMNIrdL7djitWxw==",
+  "dgSpecHash": "o8FDcqG3ipGpD74GbxpksFdTWZBBlzdEbXzrnjsWQHCqkLG7kgbXajAdnofEByNJLVHV92QeHL/uiHj4D9UAaQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\livia\\source\\repos\\pay-admin\\AuthService\\AuthService.csproj",
+  "projectFilePath": "C:\\Users\\livia\\Source\\Repos\\pay-admin\\AuthService\\AuthService.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\livia\\.nuget\\packages\\awssdk.core\\3.7.100.14\\awssdk.core.3.7.100.14.nupkg.sha512",
     "C:\\Users\\livia\\.nuget\\packages\\awssdk.securitytoken\\3.7.100.14\\awssdk.securitytoken.3.7.100.14.nupkg.sha512",

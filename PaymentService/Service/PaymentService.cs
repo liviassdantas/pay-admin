@@ -27,7 +27,8 @@ namespace pay_admin.Service
         public PaymentService() { }
 
         private readonly IMongoCollection<PaymentTransaction> _paymentTransactionCollection;
-        private readonly KafkaProducerService _kafkaProducerService = new KafkaProducerService("localhost:29092");
+        private static string bootstrapServer = "localhost:29092";
+        private readonly KafkaProducerService _kafkaProducerService = new KafkaProducerService(bootstrapServer);
         private static HttpClient client = new();
 
         public PaymentService(IOptions<PaymentsDatabaseSettings> paymentDatabaseSettings)
@@ -132,11 +133,6 @@ namespace pay_admin.Service
             }
 
         }
-
-        //public async Task<ConsultBillingDTO> ConsultBilling(ConsulterDTO consulter)
-        //{
-
-        //}
 
         private static PaymentTransactionDTO GetLoggedUser(HttpContext context)
         {
