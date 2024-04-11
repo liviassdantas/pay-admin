@@ -4,6 +4,6 @@
 - Stay confortable to make PR's and suggestions.
 
 ## How To Run:
-- First, the AuthService must be initialized and a user has to be created. Then, in this same project, you must have to login.
+- First, the AuthService must be initialized and an user has to be created. Then, in this same project, you should do the login, in Login API.
 - After you've logged up and authenticated the user, you can run the PaymentService and execute the transactions API's.
 - There's a Swagger documentation, so you can run all the API's for that. 
