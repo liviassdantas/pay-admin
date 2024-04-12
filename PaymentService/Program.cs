@@ -17,6 +17,7 @@ builder.Services.Configure<PaymentsDatabaseSettings>(
 
 builder.Services.AddSingleton<IPaymentService, PaymentService>();
 builder.Services.AddSingleton<IMessagesProducerService, KafkaProducerService>();
+builder.Services.AddHostedService<KafkaConsumerService>();
 
 builder.Services.AddControllers();
 

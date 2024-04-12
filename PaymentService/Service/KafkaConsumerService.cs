@@ -4,40 +4,37 @@ using static Confluent.Kafka.ConfigPropertyNames;
 
 namespace pay_admin.Service
 {
-    public abstract class KafkaConsumerService<T> : BackgroundService
+    public class KafkaConsumerService : BackgroundService
     {
-        private readonly IConsumer<string, string> _consumer;
-        public KafkaConsumerService(string bootstrapServers, string groupId, string topic)
+        private readonly IConsumer<Ignore, string> _consumer;
+        private readonly ILogger<KafkaConsumerService> _logger;
+        private readonly string _topic;
+        public KafkaConsumerService(IConfiguration configuration, ILogger<KafkaConsumerService> logger, string topic, string groupId)
         {
-            var config = new ConsumerConfig
+            _logger = logger;
+
+            var consumerConfig = new ConsumerConfig
             {
-                BootstrapServers = bootstrapServers,
+                BootstrapServers = configuration["Kafka:BootstrapServers"],
                 GroupId = groupId,
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
-            _consumer = new ConsumerBuilder<string, string>(config).Build();
-            _consumer.Subscribe(topic); 
+
+            _consumer = new ConsumerBuilder<Ignore, string>(consumerConfig).Build();
+            _topic = topic;
         }
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while(!stoppingToken.IsCancellationRequested) 
+            _consumer.Subscribe(_topic);
+
+            while (!stoppingToken.IsCancellationRequested)
             {
-                try
-                {
-                    var result = _consumer.Consume(stoppingToken);
-                    if(result != null && !result.IsPartitionEOF)
-                    {
-                        var value = JsonConvert.DeserializeObject<T>(result.Value);
-                        await ConsumeAsync(value, stoppingToken);
-                    }
-                }catch (OperationCanceledException)
-                {
-                    throw;
-                }catch (Exception ex)
-                {
-                    throw new Exception(ex.ToString(), ex);
-                }
+                ProcessKafkaMessage(stoppingToken);
+
+                _ = Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
             }
+
             _consumer.Close();
         }
         public override void Dispose()
@@ -45,8 +42,22 @@ namespace pay_admin.Service
             _consumer.Dispose();
             base.Dispose();
         }
-        protected abstract Task ConsumeAsync(T value, CancellationToken stoppingToken);
 
+        public void ProcessKafkaMessage(CancellationToken stoppingToken)
+        {
+            try
+            {
+                var consumeResult = _consumer.Consume(stoppingToken);
+
+                var message = consumeResult.Message.Value;
+
+                _logger.LogInformation($"{consumeResult.Topic} - received a new message: {message}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error processing Kafka message: {ex.Message}");
+            }
+        }
 
     }
 }
