@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "xE0meoNtx4m+FvNCdEYWSMd8nR3w97zUXjoQPrB3UZEngtW40hTcZP9CJTcYTUt2LWaI/W7EmSZCL4FQviSl9A==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\livia\\Source\\Repos\\pay-admin\\ConsumerService\\ConsumerService.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\livia\\.nuget\\packages\\confluent.kafka\\2.3.0\\confluent.kafka.2.3.0.nupkg.sha512",
+    "C:\\Users\\livia\\.nuget\\packages\\librdkafka.redist\\2.3.0\\librdkafka.redist.2.3.0.nupkg.sha512",
+    "C:\\Users\\livia\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\livia\\.nuget\\packages\\system.memory\\4.5.0\\system.memory.4.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}

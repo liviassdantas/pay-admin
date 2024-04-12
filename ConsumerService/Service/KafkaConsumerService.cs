@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using static Confluent.Kafka.ConfigPropertyNames;
 
-namespace pay_admin.Service
+namespace ConsumerService.Service
 {
     public class KafkaConsumerService : BackgroundService
     {
