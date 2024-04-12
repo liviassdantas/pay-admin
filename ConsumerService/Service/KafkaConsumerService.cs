@@ -7,12 +7,12 @@ namespace ConsumerService.Service
     public class KafkaConsumerService : BackgroundService
     {
         private readonly IConsumer<Ignore, string> _consumer;
-        private readonly ILogger<KafkaConsumerService> _logger;
+        private readonly ILogger _logger;
         private readonly string _topic;
         private readonly string _groupId;
-        public KafkaConsumerService(IConfiguration configuration, ILogger<KafkaConsumerService> logger, string groupId, string topic)
+        public KafkaConsumerService(IConfiguration configuration, ILoggerFactory loggerFactory, string groupId, string topic)
         {
-            _logger = logger;
+            _logger = loggerFactory.CreateLogger("ConsumerService.Service.KafkaConsumerService");
             _groupId = groupId;
             _topic = topic;
 
@@ -26,12 +26,7 @@ namespace ConsumerService.Service
             _consumer = new ConsumerBuilder<Ignore, string>(consumerConfig).Build();
 
         }
-        public KafkaConsumerService(string groupId, string topic)
-        {
-            _topic = topic;
-            _groupId = groupId;
-
-        }
+        
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\livia\\Source\\Repos\\pay-admin\\ConsumerService\\ConsumerService.csproj": {}
+    "C:\\Users\\livia\\source\\repos\\pay-admin\\ConsumerService\\ConsumerService.csproj": {}
   },
   "projects": {
-    "C:\\Users\\livia\\Source\\Repos\\pay-admin\\ConsumerService\\ConsumerService.csproj": {
+    "C:\\Users\\livia\\source\\repos\\pay-admin\\ConsumerService\\ConsumerService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\livia\\Source\\Repos\\pay-admin\\ConsumerService\\ConsumerService.csproj",
+        "projectUniqueName": "C:\\Users\\livia\\source\\repos\\pay-admin\\ConsumerService\\ConsumerService.csproj",
         "projectName": "ConsumerService",
-        "projectPath": "C:\\Users\\livia\\Source\\Repos\\pay-admin\\ConsumerService\\ConsumerService.csproj",
+        "projectPath": "C:\\Users\\livia\\source\\repos\\pay-admin\\ConsumerService\\ConsumerService.csproj",
         "packagesPath": "C:\\Users\\livia\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\livia\\Source\\Repos\\pay-admin\\ConsumerService\\obj\\",
+        "outputPath": "C:\\Users\\livia\\source\\repos\\pay-admin\\ConsumerService\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\livia\\AppData\\Roaming\\NuGet\\NuGet.Config",

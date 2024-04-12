@@ -2,7 +2,8 @@ using ConsumerService.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
-builder.Services.AddHostedService<KafkaConsumerService>();
+var loggerFactory = new LoggerFactory();
+builder.Services.AddHostedService(sp => new CreateABillingConsumerService(config, loggerFactory, "CreateABillingGroup", "CreateABilling"));
 
 builder.Services.AddControllers();
 

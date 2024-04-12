@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\livia\\Source\\Repos\\pay-admin\\AuthService\\AuthService.csproj": {}
+    "C:\\Users\\livia\\source\\repos\\pay-admin\\AuthService\\AuthService.csproj": {}
   },
   "projects": {
-    "C:\\Users\\livia\\Source\\Repos\\pay-admin\\AuthService\\AuthService.csproj": {
+    "C:\\Users\\livia\\source\\repos\\pay-admin\\AuthService\\AuthService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\livia\\Source\\Repos\\pay-admin\\AuthService\\AuthService.csproj",
+        "projectUniqueName": "C:\\Users\\livia\\source\\repos\\pay-admin\\AuthService\\AuthService.csproj",
         "projectName": "AuthService",
-        "projectPath": "C:\\Users\\livia\\Source\\Repos\\pay-admin\\AuthService\\AuthService.csproj",
+        "projectPath": "C:\\Users\\livia\\source\\repos\\pay-admin\\AuthService\\AuthService.csproj",
         "packagesPath": "C:\\Users\\livia\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\livia\\Source\\Repos\\pay-admin\\AuthService\\obj\\",
+        "outputPath": "C:\\Users\\livia\\source\\repos\\pay-admin\\AuthService\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\livia\\AppData\\Roaming\\NuGet\\NuGet.Config",
